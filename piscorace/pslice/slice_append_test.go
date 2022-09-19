@@ -1,4 +1,4 @@
-package piscoslice
+package pslice
 
 import (
 	"sync"
