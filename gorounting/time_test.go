@@ -48,3 +48,15 @@ func TestTimeoutReturn(t *testing.T) {
 	}
 	fmt.Println("完成")
 }
+
+func TestWithTimeout(t *testing.T) {
+	ctx, cancelFunc := context.WithTimeout(context.Background(), time.Second*2)
+	go func() {
+		for range time.Tick(time.Millisecond * 500) {
+			t.Log("go func")
+		}
+		cancelFunc()
+	}()
+	<-ctx.Done()
+	t.Log("结束")
+}
