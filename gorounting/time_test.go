@@ -2,10 +2,25 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"testing"
 	"time"
 )
+
+func TestTimeoutDeadLine(t *testing.T) {
+
+	ctxTimeout, cancelFunc := context.WithTimeout(
+		context.Background(),
+		time.Second*3,
+	)
+	go func() {
+		time.Sleep(time.Second * 1)
+		cancelFunc()
+	}()
+	<-ctxTimeout.Done()
+	t.Logf("err:%t", errors.Is(ctxTimeout.Err(), context.DeadlineExceeded))
+}
 
 func TestTimeout(t *testing.T) {
 	i := 0
